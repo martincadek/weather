@@ -1,0 +1,512 @@
+head() %>%
+map( ~select(data = weather, "description"))
+flat_df %>%
+head() %>%
+map( ~select(data = flat_df$weather, description))
+flat_df %>%
+head() %>%
+map(select(data = weather, description))
+flat_df %>%
+head() %>%
+map(select(.data = weather, description))
+flat_df %>%
+head() %>%
+map(~select(.data = weather, description))
+flat_df %>%
+head() %>%
+map(~select(.data = weather, description), .id = "test")
+flat_df %>%
+head() %>%
+map(~select(.data = .x, description), .id = "test")
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(weather, select(description),
+.progress = TRUE,
+.options = future_options(globals = "2")))
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(., select(description),
+.progress = TRUE,
+.options = future_options(globals = "2")))
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(select(.data = weather, description),
+.progress = TRUE,
+.options = future_options(globals = "2")))
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(.x = weather, select(.data = weather, description),
+.progress = TRUE,
+.options = future_options(globals = "2")))
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(.x = ., select(.data = weather, description),
+.progress = TRUE,
+.options = future_options(globals = "2")))
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(., select(.data = weather, description),
+.progress = TRUE,
+.options = future_options(globals = "2")))
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(weather, ~select(description),
+.progress = TRUE,
+.options = future_options(globals = "2")))
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(weather, ~select(.data = weather,
+description),
+.progress = TRUE,
+.options = future_options(globals = "2")))
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(., ~select(.data = weather,
+description),
+.progress = TRUE,
+.options = future_options(globals = "2")))
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(.x = ., ~select(.data = weather,
+description),
+.progress = TRUE,
+.options = future_options(globals = "2")))
+flat_df %>%
+head() %>%
+mutate(weather_description = map(weather, select, description))
+flat_df %>%
+head() %>%
+future_map(.x = ., ~select(.data = weather,
+description),
+.progress = TRUE,
+.options = future_options(globals = "2")))
+flat_df %>%
+head() %>%
+future_map(.x = ., ~select(.data = weather,
+description),
+.progress = TRUE,
+.options = future_options(globals = "2"))
+flat_df %>%
+future_map(.x = ., ~select(.data = weather,
+description),
+.progress = TRUE,
+.options = future_options(globals = "2"))
+flat_df %>%
+head() %>%
+map(~select(.data = weather, description), .id = "test")
+flat_df %>%
+head() %>%
+mutate(weather_description = map(weather, ~select(description)))
+flat_df %>%
+head() %>%
+mutate(weather_description = map(weather, ~select(.data = ., description)))
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(weather, ~select(.data = ., description)))
+flat_df %>%
+# head() %>%
+mutate(weather_description = future_map(weather,
+~select(.data = .,
+description)))
+future()
+?future_map
+flat_df %>%
+# head() %>%
+mutate(weather_description = future_map(weather,
+~select(.data = .,
+description)),
+.progress = TRUE)
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(weather,
+~select(.data = .,
+description)),
+.progress = TRUE,
+.options = future_options(globals = "2"))
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(weather,
+~select(.data = .,
+description)),
+.progress = TRUE,
+.options = future_options(globals = "2"))
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(weather,
+~select(.data = .,
+description)),
+.progress = TRUE)
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(weather,
+~select(.data = .,
+description)),
+progress = TRUE)
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(weather,
+~select(.data = .,
+description),
+.progress = TRUE))
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(weather,
+~select(.data = .,
+description),
+.progress = TRUE,
+.options = future_options(globals = "2")))
+flat_df %>%
+#head() %>%
+mutate(weather_description = future_map(weather,
+~select(.data = .,
+description),
+.progress = TRUE,
+.options = future_options(globals = "2")))
+plan(multisession)
+x <- 1
+y <- 2
+flat_df %>%
+#head() %>%
+mutate(weather_description = future_map(weather,
+~select(.data = .,
+description),
+.progress = TRUE,
+.options = future_options(globals = "y")))
+plan(multiprocess)
+flat_df %>%
+#head() %>%
+mutate(weather_description = future_map(weather,
+~select(.data = .,
+description),
+.progress = TRUE))
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(weather,
+~select(.data = .,
+description),
+.progress = TRUE))
+flat_df %>%
+head() %>%
+future_map(.x = ., ~select(.data = weather,
+description),
+.progress = TRUE,
+.options = future_options(globals = "2"))
+flat_df %>%
+head() %>%
+future_map(.x = ., ~select(.data = weather,
+description),
+.progress = TRUE,
+.options = future_options(globals = "2"))
+flat_df %>%
+head() %>%
+future_map(.x = ., ~select(.data = weather,
+description),
+.progress = TRUE)
+flat_df %>%
+head() %>%
+mutate(weather_description = map(weather, select, description))
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(weather,
+~select(.data = .,
+description),
+.progress = TRUE))
+flat_df %>%
+head()
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(weather,
+~select(.data = .,
+description),
+.progress = TRUE)
+)
+last_error()
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(weather,
+~select(.data = .,
+description))
+)
+flat_df %>%
+head() %>%
+future_map(.x = ., ~select(.data = weather,
+description))
+plan(multiprocess())
+plan(multiprocess)
+flat_df %>%
+head() %>%
+future_map(.x = ., ~select(.data = weather,
+description),
+.progress = TRUE)
+plan(multiprocess)
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(weather,
+~select(.data = .,
+description))
+)
+plan(multiprocess)
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(weather,
+~select(.data = .,
+description),
+.progress = TRUE)
+)
+tictoc::tic()
+plan(multiprocess)
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(weather,
+~select(.data = .,
+description),
+.progress = TRUE)
+)
+tictoc::toc()
+tictoc::tic()
+flat_df %>%
+head() %>%
+mutate(weather_description = map(weather, select, description))
+tictoc::toc()
+# saveRDS(df, file = "data/weather.rds")
+df <- readRDS(file = "data/weather.rds")
+df
+flat_df %>%
+head() %>%
+future_map(.x = ., ~select(.data = weather,
+description),
+.progress = TRUE)
+library(tidyverse); packageVersion("tidyverse")   # ‘1.3.0’
+library(jsonlite); packageVersion("jsonlite")     # ‘1.7.0’
+library(janitor); packageVersion("janitor")       # ‘2.0.1’
+library(furrr); packageVersion("furrr")           # ‘0.1.0’
+library(tmap); packageVersion("tmap")             # ‘3.1’
+library(tmaptools); packageVersion("tmaptools")   # ‘3.1’
+library(ggmap); packageVersion("ggmap")           # ‘3.0.0’
+library(sf); packageVersion("sf")                 # ‘0.9.4’
+library(spData); packageVersion("spData")         # ‘0.3.8’
+tictoc::tic()
+flat_df %>%
+head() %>%
+mutate(weather_description = map(weather, select, description))
+tictoc::toc()
+url <- "https://www.whiteswandata.com/s/weatherjson.gz"
+raw_df <- stream_in(con = gzcon(con = url(url)), verbose = TRUE)
+weather <- raw_df %>%
+select(weather) %>%
+unnest(cols = c(weather))
+flat_df <- raw_df %>%
+flatten()
+install.packages("tidytable")
+tictoc::tic()
+flat_df %>%
+head() %>%
+mutate(weather_description = map(weather, select, description))
+tictoc::toc()
+tictoc::tic()
+flat_df %>%
+head() %>%
+mutate(weather_description = map(weather, select, description))
+tictoc::toc()
+tictoc::tic()
+flat_df %>%
+head() %>%
+mutate(weather_description = future_map(weather,
+~select(.data = .,
+description),
+.progress = TRUE)
+)
+tictoc::toc()
+tictoc::tic()
+flat_df %>%
+#head() %>%
+mutate(weather_description = future_map(weather,
+~select(.data = .,
+description),
+.progress = TRUE)
+)
+tictoc::toc()
+plan(multiprocess)
+tictoc::tic()
+flat_df %>%
+#head() %>%
+mutate(weather_description = future_map(weather,
+~select(.data = .,
+description),
+.progress = TRUE)
+)
+tictoc::toc()
+df <- flat_df %>%
+mutate(weather_description = map(weather, ~select(.data = ., description))) %>%
+as_tibble() %>%
+clean_names()
+df <- flat_df %>%
+mutate(weather_description = future_map(weather, ~select(.data = ., description),
+.progress = TRUE)) %>%
+as_tibble() %>%
+clean_names()
+library(tidytable)
+df <- flat_df %>%
+head()
+df <- flat_df %>%
+head() %>%
+mutate.(weather_description = map.(weather, ~select(.data = ., description))) %>%
+as_tibble() %>%
+clean_names()
+df
+tictoc::tic()
+df <- flat_df %>%
+head() %>%
+mutate.(weather_description = map.(weather,
+~select(.data = ., description))) %>%
+as_tibble() %>%
+clean_names()
+tictoc::toc()
+plan(multiprocess)
+tictoc::tic()
+df <- flat_df %>%
+head() %>%
+mutate(weather_description = future_map(weather,
+~select(.data = ., description),
+.progress = TRUE)) %>%
+as_tibble() %>%
+clean_names()
+tictoc::toc()
+tictoc::tic()
+df <- flat_df %>%
+head() %>%
+mutate(weather_description = map(weather,
+~select(.data = ., description))) %>%
+as_tibble() %>%
+clean_names()
+tictoc::toc()
+tictoc::tic(msg = "Normal")
+df <- flat_df %>%
+head() %>%
+mutate(weather_description = map(weather,
+~select(.data = ., description))) %>%
+as_tibble() %>%
+clean_names()
+tictoc::toc()
+plan(multiprocess)
+tictoc::tic(msg = "furrr")
+df <- flat_df %>%
+head() %>%
+mutate(weather_description = future_map(weather,
+~select(.data = ., description),
+.progress = TRUE)) %>%
+as_tibble() %>%
+clean_names()
+tictoc::toc()
+tictoc::tic(msg = "tidytable")
+df <- flat_df %>%
+head() %>%
+mutate.(weather_description = map.(weather,
+~select.(.data = ., description))) %>%
+as_tibble() %>%
+clean_names()
+tictoc::toc()
+df <- flat_df %>%
+head() %>%
+mutate.(weather_description = map.(weather,
+~select.(.data = ., "description"))) %>%
+as_tibble() %>%
+clean_names()
+df <- flat_df %>%
+head() %>%
+mutate.(weather_description = map.(weather,
+~select.(.data = ., description))) %>%
+as_tibble() %>%
+clean_names()
+df <- flat_df %>%
+head() %>%
+mutate.(weather_description = map.(weather,
+~select(.data = ., description))) %>%
+as_tibble() %>%
+clean_names()
+?relocate
+df <- flat_df %>%
+head() %>%
+mutate.(weather_description = map.(weather,
+~select(.data = ., description))) %>%
+as_tibble() %>%
+relocate(c(time, weather), .after = last_col()) %>%
+clean_names()
+df <- flat_df %>%
+head() %>%
+relocate(c(time, weather), .after = last_col()) %>%
+mutate(weather_description = map(weather,
+~select(.data = ., description))) %>%
+as_tibble() %>%
+clean_names()
+df <- flat_df %>%
+head() %>%
+relocate(c(time, weather), .after = last_col()) %>%
+mutate(weather_description = future_map(weather,
+~select(.data = ., description),
+.progress = TRUE)) %>%
+as_tibble() %>%
+clean_names()
+df <- flat_df %>%
+head() %>%
+relocate(c(time, weather), .after = last_col()) %>%
+mutate.(weather_description = map.(weather,
+~select(.data = ., description))) %>%
+as_tibble() %>%
+clean_names()
+df
+# this takes 545 seconds
+tictoc::tic(msg = "Normal")
+df <- flat_df %>%
+#head() %>%
+relocate(c(time, weather), .after = last_col()) %>%
+mutate(weather_description = map(weather,
+~select(.data = ., description))) %>%
+as_tibble() %>%
+clean_names()
+tictoc::toc()
+plan(multiprocess)
+tictoc::tic(msg = "furrr")
+df <- flat_df %>%
+#head() %>%
+relocate(c(time, weather), .after = last_col()) %>%
+mutate(weather_description = future_map(weather,
+~select(.data = ., description),
+.progress = TRUE)) %>%
+as_tibble() %>%
+clean_names()
+tictoc::toc()
+tictoc::tic(msg = "tidytable")
+df <- flat_df %>%
+#head() %>%
+relocate(c(time, weather), .after = last_col()) %>%
+mutate.(weather_description = map.(weather,
+~select(.data = ., description))) %>%
+as_tibble() %>%
+clean_names()
+tictoc::toc()
+df
+plan(multiprocess)
+tictoc::tic(msg = "furrr")
+df <- flat_df %>%
+#head() %>%
+relocate(c(time, weather), .after = last_col()) %>%
+mutate(weather_description = future_map(weather,
+~select(.data = ., description),
+.progress = TRUE)) %>%
+as_tibble() %>%
+clean_names()
+tictoc::toc()
+df
+saveRDS(df, file = "data/weather.rds")
+# saveRDS(df, file = "data/weather.rds")
+df <- readRDS(file = "data/weather.rds")
+# Explore -----------------------------------------------------------------
+df %>% count(city_country, sort = TRUE) %>%
+slice_max(n, n = 50)
+df %>% count(city_name, sort = TRUE) %>%
+slice_max(n, n = 10)
+# Explore -----------------------------------------------------------------
+glimpse(df)
+df %>%
+unnest(c(weather_description))

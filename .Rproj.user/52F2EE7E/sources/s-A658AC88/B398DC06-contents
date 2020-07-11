@@ -1,0 +1,129 @@
+# Guidelines --------------------------------------------------------------
+# - We prefer you use Python or R.
+# - We prefer submissions which are short, simple and correct.
+# - It should be simple to run your code if we wish to check the output ourselves. 
+#    If your code uses external packages, you must specify the packages and their versions, 
+#    e.g. pip requirements file, Anaconda environment file, etc.
+# - Let's define "Data visualization" as the discipline of trying to understand 
+#    data by placing it in a visual context so that patterns, 
+#    trends and correlations that might not otherwise be detected can be exposed.
+
+# Directions --------------------------------------------------------------
+# 1. Parse the file at https://www.whiteswandata.com/s/weatherjson.gz and 
+#    output an "interesting" data visualization based upon data in the file, 
+#    ideally as a PNG or PDF file, as appropriate.
+# 2. Succinctly comment on the pros/cons of the visualization you made.
+# 3. Send an email with Subject "<Your name> - Small dev test" back to this email 
+#    address with your commentary in the body and the code, 
+#    packages specification (if any) and the visualization file as attachments.
+
+# Packages ----------------------------------------------------------------
+# R version 4.0.2 (2020-06-22)
+# Platform: x86_64-w64-mingw32/x64 (64-bit)
+# Running under: Windows 10 x64 (build 18363)
+
+library(tidyverse); packageVersion("tidyverse")   # ‘1.3.0’
+library(jsonlite); packageVersion("jsonlite")     # ‘1.7.0’
+library(janitor); packageVersion("janitor")       # ‘2.0.1’
+library(furrr); packageVersion("furrr")           # ‘0.1.0’
+
+library(tmap); packageVersion("tmap")             # ‘3.1’
+library(tmaptools); packageVersion("tmaptools")   # ‘3.1’
+library(ggmap); packageVersion("ggmap")           # ‘3.0.0’
+library(sf); packageVersion("sf")                 # ‘0.9.4’
+library(spData); packageVersion("spData")         # ‘0.3.8’
+
+
+# DATA_read ---------------------------------------------------------------
+# system.time(
+#      data_local <- gzfile(description = "data/weather.json.gz", open = "rt") %>%
+#      stream_in(verbose = TRUE)
+#      )
+# closeAllConnections()
+
+# Uncomment for submission
+url <- "https://www.whiteswandata.com/s/weatherjson.gz"
+raw_df <- stream_in(con = gzcon(con = url(url)), verbose = TRUE)
+
+weather <- raw_df %>%
+     select(weather) %>%
+     unnest(cols = c(weather))
+
+flat_df <- raw_df %>%
+        flatten()
+
+# DATA_coerce -------------------------------------------------------------
+# # this takes 522 seconds
+# tictoc::tic(msg = "Normal")
+# df <- flat_df %>%
+#         #head() %>%
+#         relocate(c(time, weather), .after = last_col()) %>%
+#         mutate(weather_description = map(weather, 
+#                                          ~select(.data = ., description))) %>%
+#         as_tibble() %>%
+#         clean_names()
+# tictoc::toc()
+
+# 315
+plan(multiprocess)
+tictoc::tic(msg = "furrr")
+df <- flat_df %>%
+        #head() %>%
+        relocate(c(time, weather), .after = last_col()) %>%
+        mutate(weather_description = future_map(weather, 
+                                                ~select(.data = ., description),
+                                                .progress = TRUE)) %>%
+        as_tibble() %>%
+        clean_names()
+tictoc::toc()
+
+# # 525
+# tictoc::tic(msg = "tidytable")
+# df <- flat_df %>%
+#         #head() %>%
+#         relocate(c(time, weather), .after = last_col()) %>%
+#         mutate.(weather_description = map.(weather, 
+#                                            ~select(.data = ., description))) %>%
+#         as_tibble() %>%
+#         clean_names()
+# tictoc::toc()
+
+# saveRDS(df, file = "data/weather.rds")
+df <- readRDS(file = "data/weather.rds")
+
+# Explore -----------------------------------------------------------------
+glimpse(df)
+
+df %>% count(city_country, sort = TRUE) %>%
+        slice_max(n, n = 50)
+
+df %>% count(city_name, sort = TRUE) %>%
+        slice_max(n, n = 10)
+
+
+
+# Visualise ---------------------------------------------------------------
+ggplot(df %>% count(city_country, sort = TRUE) %>% slice_max(n, n = 50), 
+       aes(x = fct_reorder(city_country, -n), y = n)) +
+     geom_bar(stat = "identity")
+
+
+# Map ---------------------------------------------------------------------
+df_sf <- df %>% 
+        select(-weather) %>%
+        filter(!is.na(city_coord_lon)) %>%
+        st_as_sf(coords = c("city_coord_lon", "city_coord_lat"), crs = 4326) 
+
+tm_shape(world) +
+        tm_fill() +
+        tm_borders("white", lwd = .5) +
+        tm_text("iso_a2", size = "area_km2", 
+                legend.size.show = FALSE, remove.overlap = FALSE) +
+tm_shape(df_sf %>% filter(city_country == "DE")) +
+        tm_symbols(col = "wind_speed", size = "wind_speed", 
+                   alpha = 0.5, scale = 0.5,
+                   clustering = TRUE)
+
+
+
+
