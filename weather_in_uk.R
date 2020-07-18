@@ -1,3 +1,14 @@
+# Virtual environment -----------------------------------------------------
+# install.packages(renv)
+# renv::init()
+# renv::snapshot()
+# renv::restore()
+
+
+# Bug ---------------------------------------------------------------------
+# The file may not source because of a special symbol on row 199 (Wind).
+
+
 # ABOUT -------------------------------------------------------------------
 # The visualisation shows features available in the weather data.
 # Due to the size of the data, I have decided to focus on the UK –
@@ -40,11 +51,20 @@ library(Cairo)
 packageVersion("Cairo") # ‘1.5.12.2’
 library(ggrepel)
 packageVersion("ggrepel") # ‘0.8.2’
+library(gganimate)
+packageVersion("gganimate") # ‘1.0.6’
 
 # DATA_read ---------------------------------------------------------------
 # The following code reads data directly from the URL
-url <- "https://www.whiteswandata.com/s/weatherjson.gz"
-raw_df <- stream_in(con = gzcon(con = url(url)), verbose = TRUE)
+# I can't guarantee the source remains.
+
+# url <- "https://www.whiteswandata.com/s/weatherjson.gz"
+# raw_df <- stream_in(con = gzcon(con = url(url)), verbose = TRUE)
+
+# It is a little download it every time, so I saved it in data folder as rds.
+# saveRDS(object = raw_df, file = "data/weather.rds")
+
+raw_df <- readRDS(file = "data/weather.rds")
 
 weather_only <- raw_df %>%
   flatten() %>%
@@ -176,7 +196,7 @@ ggwind <- ggplot() +
       x = city_coord_lon, y = city_coord_lat,
       colour = wind_speed, size = wind_speed,
       angle = wind_deg, alpha = wind_speed
-    ), label = "→" # https://stackoverflow.com/a/42754519/3223143
+    ), label = "→" # https://stackoverflow.com/a/42754519/3223143, causes issues when sourcing?
   ) +
   scale_colour_viridis(option = "magma", end = 0.8) +
   coord_map() +
@@ -435,3 +455,102 @@ gghumid + ggpressure + ggtemp + ggwind + ggclouds + ggweather +
   theme(text = element_text("Nunito"))
 dev.off()
 
+
+
+
+# Animate -----------------------------------------------------------------
+
+# Ani Weather -------------------------------------------------------------
+ggweather_ani <- ggplot() + geom_polygon(
+  data = map_uk, aes(x = long, y = lat, group = group),
+  fill = "grey", alpha = 0.8
+  ) +
+  geom_path(
+    data = map_uk, aes(
+      x = long,
+      y = lat,
+      group = group
+    ),
+    color = "white", size = 0.1
+  ) +
+  geom_point(
+    data = map_uk_weather %>%
+      filter(city_zoom == 7),
+    aes(x = city_coord_lon, y = city_coord_lat),
+    size = 2, colour = "black"
+  ) +
+  geom_text_repel(
+    data = map_uk_weather %>%
+      filter(city_zoom == 7) %>%
+      filter(time %in% (1554462361:1554462365)),
+    aes(
+      x = city_coord_lon, y = city_coord_lat,
+      label = main
+    )
+  ) +
+  scale_colour_viridis(option = "magma", end = 0.8) +
+  coord_map() +
+  theme_map_custom() +
+  # Adding animation is as simple as using the following three lines.
+  # Note that time now is not filtered upon but used in the animation below.
+  labs(title = "Time: {frame_time}", subtitle = "Overall weather in the UK") +
+  transition_time(time) +
+  ease_aes("linear")
+
+
+# Ani Temperature ---------------------------------------------------------
+ggtemp_ani <- ggplot() +
+  geom_polygon(
+    data = map_uk, aes(x = long, y = lat, group = group),
+    fill = "grey", alpha = 0.8
+  ) +
+  geom_path(
+    data = map_uk, aes(
+      x = long,
+      y = lat,
+      group = group
+    ),
+    color = "white", size = 0.1
+  ) +
+  geom_point(
+    data = map_uk_weather %>%
+      filter(city_zoom == 16),
+    aes(
+      x = city_coord_lon, y = city_coord_lat,
+      colour = main_temp, fill = main_temp, size = main_temp
+    ),
+    shape = 18, alpha = 0.2
+  ) +
+  scale_colour_viridis(option = "magma", end = 0.8) +
+  scale_fill_viridis(
+    option = "magma", end = 0.8,
+    name = "Level",
+    guide = guide_colorbar(
+      direction = "vertical",
+      barheight = unit(50, units = "mm"),
+      barwidth = unit(2, units = "mm"),
+      draw.ulim = TRUE,
+      title.position = "top",
+      title.hjust = 0.5,
+      title.vjust = 1,
+      label.hjust = 0.5
+    )
+  ) +
+  coord_map() +
+  theme_map_custom() +
+  guides(colour = "none", size = "none") +
+  labs(title = "Time: {frame_time}", subtitle = "Temperature in the UK") +
+  transition_time(time) +
+  ease_aes("linear")
+
+
+
+# Save animation ----------------------------------------------------------
+anim_save(filename = "weather_animated.gif", animation = ggweather_ani)
+anim_save(filename = "temperature_animated.gif", animation = ggtemp_ani)
+# Will throw warnings about the font.
+
+# Note: It would be pretty to combine these simple animations. There's a way 
+# look at https://github.com/dariyasydykova/open_projects/blob/master/ROC_animation/R/animate_PR.r
+# It relies on magick package to stitch together separate png files to reconstruct
+# the animation.
