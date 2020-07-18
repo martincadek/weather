@@ -450,7 +450,7 @@ CairoPNG(filename = "weather_output_uk.png", width = 1200, height = 1200)
 gghumid + ggpressure + ggtemp + ggwind + ggclouds + ggweather +
   plot_annotation(
     title = "Weather data available for the United Kingdom",
-    caption = "Data: https://www.whiteswandata.com/s/weatherjson.gz\nTime: 1554462361 to 1554462365; Zoom: 7 to 16\nVisualisation by: Martin Cadek"
+    caption = "Time: 1554462361 to 1554462365; Zoom: 7 to 16\nVisualisation by: Martin Cadek"
   ) &
   theme(text = element_text("Nunito"))
 dev.off()
